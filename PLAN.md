@@ -182,106 +182,108 @@ Ejemplo: respuesta correcta = 2.67, respuesta del jugador = 2.66 → válida
 
 ## 5. Fases de Desarrollo
 
-### FASE A: DISEÑO VISUAL (Días 1-7)
+### FASE A: DISEÑO VISUAL (Días 1-7) ✅ COMPLETADA
 
-#### Fase 1: Configuración Inicial (Días 1-2)
-- [ ] Inicializar proyecto Electron
-- [ ] Configurar estructura de carpetas
-- [ ] Crear ventana principal básica
-- [ ] Configurar electron-builder para Windows
+#### Fase 1: Configuración Inicial (Días 1-2) ✅
+- [x] Inicializar proyecto Electron
+- [x] Configurar estructura de carpetas
+- [x] Crear ventana principal básica
+- [x] Configurar electron-builder para Windows
 
-#### Fase 2: Diseño Visual con Pencil MCP (Días 3-7)
+#### Fase 2: Diseño Visual con Pencil MCP (Días 3-7) ✅
 **Herramienta**: Pencil MCP para diseño de interfaces
 
-**2.1 Diseño de Pantalla de Inicio**
-- [ ] Crear mockup de pantalla principal
-- [ ] Diseñar selector de nivel (EGB / Básica Superior / Bachillerato)
-- [ ] Diseñar formulario de configuración de jugadores (2-4 jugadores)
-- [ ] Diseñar selector de modo (Normal / Concurso)
-- [ ] Diseñar botón de instrucciones
+**2.1 Diseño de Pantalla de Inicio** ✅
+- [x] Crear mockup de pantalla principal
+- [x] Diseñar selector de nivel (EGB / Básica Superior / Bachillerato)
+- [x] Diseñar formulario de configuración de jugadores (2-4 jugadores)
+- [x] Diseñar selector de modo (Normal / Concurso)
+- [x] Diseñar botón de instrucciones
 
-**2.2 Diseño de Tableros por Nivel**
-- [ ] Diseñar tablero Nivel 1 (4x4, colores rojo/blanco)
-- [ ] Diseñar tablero Nivel 2 (4x4, colores verde/amarillo/rojo)
-- [ ] Diseñar tablero Nivel 3 (4x4, colores azul/amarillo/naranja)
-- [ ] Diseñar casillas especiales (⭐ comodín, 😟 penalización, 🎯 meta)
-- [ ] Diseñar fichas/avatares de jugadores
-- [ ] Diseñar área de temporizador y puntuación
+**2.2 Diseño de Tableros por Nivel** ✅
+- [x] Diseñar tablero Nivel 1 (4x4, colores rojo/blanco)
+- [x] Diseñar tablero Nivel 2 (4x4, colores verde/amarillo/rojo)
+- [x] Diseñar tablero Nivel 3 (4x4, colores azul/amarillo/naranja)
+- [x] Diseñar casillas especiales (⭐ comodín, 😟 penalización,  meta)
+- [x] Diseñar fichas/avatares de jugadores
+- [x] Diseñar área de temporizador y puntuación
 
-**2.3 Diseño de Cartas de Desafío**
-- [ ] Diseñar plantilla de carta (frente con pregunta)
-- [ ] Diseñar reverso de carta
-- [ ] Diseñar input numérico y botón "Validar"
-- [ ] Diseñar feedback visual (verde = correcto, rojo = incorrecto)
-- [ ] Diseñar variaciones de color por nivel y dificultad
+**2.3 Diseño de Cartas de Desafío** ✅
+- [x] Diseñar plantilla de carta (frente con pregunta)
+- [x] Diseñar reverso de carta
+- [x] Diseñar input numérico y botón "Validar"
+- [x] Diseñar feedback visual (verde = correcto, rojo = incorrecto)
+- [x] Diseñar variaciones de color por nivel y dificultad
 
-**2.4 Diseño de Pantalla de Resultados**
-- [ ] Diseñar pantalla de fin de juego
-- [ ] Diseñar ranking de jugadores
-- [ ] Diseñar estadísticas (tiempo, cartas resueltas, puntos)
-- [ ] Diseñar botón "Jugar de nuevo" / "Volver al inicio"
+**2.4 Diseño de Pantalla de Resultados** ✅
+- [x] Diseñar pantalla de fin de juego
+- [x] Diseñar ranking de jugadores
+- [x] Diseñar estadísticas (tiempo, cartas resueltas, puntos)
+- [x] Diseñar botón "Jugar de nuevo" / "Volver al inicio"
 
-**Entregables de Diseño**:
-- Archivos .pen con todos los mockups
-- Exportación de assets (imágenes, iconos)
-- Paleta de colores definida por nivel
-- Guía visual de componentes
-
----
-
-### FASE B: IMPLEMENTACIÓN (Días 8-28)
-
-#### Fase 3: Implementación de Pantallas Base (Días 8-11)
-- [ ] Implementar pantalla de inicio según diseño de Pencil
-- [ ] Implementar formulario de configuración de jugadores
-- [ ] Implementar navegación entre pantallas
-- [ ] Implementar pantalla de selección de nivel y modo
-- [ ] Aplicar estilos CSS según paleta de colores definida
-
-#### Fase 4: Implementación de Tablero Interactivo (Días 12-16)
-- [ ] Crear componente de tablero 4x4 con CSS Grid
-- [ ] Implementar casillas con operadores y especiales según diseño
-- [ ] Añadir fichas/avatares de jugadores
-- [ ] Implementar animaciones de movimiento
-- [ ] Diferenciar tableros por nivel (colores del diseño)
-- [ ] Integrar assets exportados desde Pencil
-
-#### Fase 5: Implementación de Sistema de Cartas y Validación (Días 17-21)
-- [ ] Crear estructura de datos para preguntas (JSON)
-- [ ] Implementar carga aleatoria de cartas
-- [ ] Implementar componente visual de carta según diseño de Pencil
-- [ ] Añadir animación de volteo
-- [ ] Implementar input numérico y botón de validación
-- [ ] Crear módulo de validación numérica con tolerancia
-- [ ] Implementar feedback visual (colores verde/rojo)
-
-#### Fase 6: Implementación de Sistema de Tiempo y Lógica de Juego (Días 22-28)
-- [ ] Implementar temporizador por carta (120s con alertas visuales/sonoras)
-- [ ] Implementar temporizador de partida (3 min modo concurso)
-- [ ] Implementar gestión de turnos
-- [ ] Implementar sistema de puntuación
-- [ ] Añadir mecánicas de comodines y penalizaciones
-- [ ] Implementar condiciones de victoria y desempate
-- [ ] Añadir estadísticas de tiempo por jugador
-- [ ] Implementar pantalla de resultados según diseño
+**Entregables de Diseño**: ✅
+- [x] Archivos .pen con todos los mockups
+- [x] Exportación de assets (imágenes, iconos)
+- [x] Paleta de colores definida por nivel
+- [x] Guía visual de componentes
 
 ---
 
-### FASE C: CONTENIDO Y FINALIZACIÓN (Días 29-35)
+### FASE B: IMPLEMENTACIÓN (Días 8-28) ✅ COMPLETADA
 
-#### Fase 7: Banco de Preguntas (Días 29-31)
-- [ ] Compilar 30 preguntas Nivel 1 (EGB) - respuestas numéricas
-- [ ] Compilar 30 preguntas Nivel 2 (Básica Superior) - respuestas numéricas
-- [ ] Compilar 30 preguntas Nivel 3 (Bachillerato) - reformuladas a respuestas numéricas
-- [ ] Validar todas las respuestas
+#### Fase 3: Implementación de Pantallas Base (Días 8-11) ✅
+- [x] Implementar pantalla de inicio según diseño de Pencil
+- [x] Implementar formulario de configuración de jugadores
+- [x] Implementar navegación entre pantallas
+- [x] Implementar pantalla de selección de nivel y modo
+- [x] Aplicar estilos CSS según paleta de colores definida
 
-#### Fase 8: Pulido y Efectos (Días 32-33)
+#### Fase 4: Implementación de Tablero Interactivo (Días 12-16) ✅
+- [x] Crear componente de tablero 4x4 con CSS Grid
+- [x] Implementar casillas con operadores y especiales según diseño
+- [x] Añadir fichas/avatares de jugadores
+- [ ] Implementar animaciones de movimiento (pendiente)
+- [x] Diferenciar tableros por nivel (colores del diseño)
+- [ ] Integrar assets exportados desde Pencil (pendiente - usar emojis por ahora)
+
+#### Fase 5: Implementación de Sistema de Cartas y Validación (Días 17-21) ✅
+- [x] Crear estructura de datos para preguntas (JSON)
+- [x] Implementar carga aleatoria de cartas
+- [x] Implementar componente visual de carta según diseño de Pencil
+- [ ] Añadir animación de volteo (pendiente)
+- [x] Implementar input numérico y botón de validación
+- [x] Crear módulo de validación numérica con tolerancia
+- [x] Implementar feedback visual (colores verde/rojo)
+
+#### Fase 6: Implementación de Sistema de Tiempo y Lógica de Juego (Días 22-28) ✅
+- [x] Implementar temporizador por carta (120s con alertas visuales)
+- [ ] Implementar alertas sonoras (pendiente)
+- [x] Implementar temporizador de partida (3 min modo concurso)
+- [x] Implementar gestión de turnos
+- [x] Implementar sistema de puntuación
+- [ ] Añadir mecánicas de comodines y penalizaciones (pendiente - estructura lista)
+- [x] Implementar condiciones de victoria y desempate
+- [x] Añadir estadísticas de tiempo por jugador
+- [x] Implementar pantalla de resultados según diseño
+
+---
+
+### FASE C: CONTENIDO Y FINALIZACIÓN (Días 29-35) 🔄 EN PROGRESO
+
+#### Fase 7: Banco de Preguntas (Días 29-31) 🔄 54/90 completadas
+- [x] Compilar 20 preguntas Nivel 1 (EGB) - respuestas numéricas
+- [x] Compilar 15 preguntas Nivel 2 (Básica Superior) - respuestas numéricas
+- [x] Compilar 19 preguntas Nivel 3 (Bachillerato) - reformuladas a respuestas numéricas
+- [x] Validar todas las respuestas
+- [ ] Expandir a 90+ preguntas (36 faltantes)
+
+#### Fase 8: Pulido y Efectos (Días 32-33) ⏳ PENDIENTE
 - [ ] Añadir animaciones CSS finales (transiciones, hover, feedback)
 - [ ] Implementar efectos de sonido (aciertos/errores)
 - [ ] Revisar coherencia visual general
 - [ ] Optimizar performance
 
-#### Fase 9: Pruebas y Empaquetado (Días 34-35)
+#### Fase 9: Pruebas y Empaquetado (Días 34-35) ⏳ PENDIENTE
 - [ ] Pruebas funcionales de todas las mecánicas
 - [ ] Pruebas con usuarios (compañeros de clase)
 - [ ] Corrección de bugs
