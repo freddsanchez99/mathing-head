@@ -109,6 +109,7 @@ function startGame() {
   renderCard(currentCard, gameState.level);
   renderScoreboard();
   updateTurnDisplay();
+  updateCardCounter();
 
   showScreen('screen-game');
 
@@ -131,6 +132,13 @@ function updateGameUI() {
   document.getElementById('game-level-chip').style.background = levelData.accentColor;
 
   document.documentElement.style.setProperty('--acento-nivel', levelData.accentColor);
+}
+
+function updateCardCounter() {
+  const counter = document.getElementById('card-counter');
+  if (counter) {
+    counter.textContent = `Carta ${gameState.totalCardsPlayed + 1}/30`;
+  }
 }
 
 function updateTurnDisplay() {
@@ -189,6 +197,7 @@ function validateAnswer() {
       loadNextCard(gameState.level);
       renderCard(currentCard, gameState.level);
       updateTurnDisplay();
+      updateCardCounter();
       showScreen('screen-game');
 
       startCardTimer(
@@ -211,6 +220,7 @@ function handleTimeUp() {
       loadNextCard(gameState.level);
       renderCard(currentCard, gameState.level);
       updateTurnDisplay();
+      updateCardCounter();
       showScreen('screen-game');
 
       startCardTimer(
