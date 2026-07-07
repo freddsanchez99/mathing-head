@@ -7,7 +7,9 @@
     "start": "electron .",
     "dev": "electron . --dev",
     "build": "electron-builder",
-    "build:win": "electron-builder --win"
+    "build:win": "electron-builder --win",
+    "rebuild": "electron-builder install-app-deps",
+    "postinstall": "electron-builder install-app-deps"
   },
   "keywords": [
     "educativo",
@@ -31,7 +33,9 @@
       "target": [
         {
           "target": "nsis",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ],
       "icon": "src/assets/images/icon.ico"
@@ -42,5 +46,8 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true
     }
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.11.1"
   }
 }

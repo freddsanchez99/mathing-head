@@ -268,6 +268,25 @@ Ejemplo: respuesta correcta = 2.67, respuesta del jugador = 2.66 → válida
 
 ---
 
+### FASE D: PERSISTENCIA Y ARCADE (Días 36-40) ✅ COMPLETADA
+
+- [x] Instalar `better-sqlite3` y configurar `postinstall: electron-builder install-app-deps`
+- [x] Crear esquema SQLite (`schema.sql`): `questions`, `matches`, `player_results`, `schema_version`
+- [x] Crear capa de BD en proceso main (`src/main/db/`) con módulos `index.js`, `questions.js`, `matches.js`, `players.js`
+- [x] Crear seed inicial (`src/main/seed/questions-seed.js`) con las 180 preguntas
+- [x] Siembra automática en primer arranque (`seedIfEmpty`)
+- [x] Refactorizar `cards.js` para cargar preguntas vía IPC con caché por nivel
+- [x] Refactorizar `startGame()`, `validateAnswer()` y `handleTimeUp()` para `await loadNextCard()`
+- [x] Persistir partida completa en `endGame()` (nivel, modo, fecha, jugadores, puntajes, posiciones)
+- [x] Calcular `isNewRecord` y mostrar badge "¡NUEVO RÉCORD!" en pantalla de resultados
+- [x] Pantalla "Sala de Trofeos" con 3 tabs: Récords / Historial / Jugadores
+- [x] Tab Récords: top 10 por nivel+modo, con filtros
+- [x] Tab Historial: últimas 50 partidas con ganador, modo, nivel
+- [x] Tab Jugadores: lista de perfiles agregados por nombre + búsqueda + perfil detallado
+- [x] Exponer API IPC segura en `preload.js` (`getQuestions`, `saveMatch`, `getHallOfFame`, `getMatchHistory`, `getPlayerProfile`, `getAllPlayers`)
+- [x] BD ubicada en `app.getPath('userData')/mathing-head.db` (modo WAL)
+- [x] Documentar Fase D en `PLAN.md`
+
 ### FASE C: CONTENIDO Y FINALIZACIÓN (Días 29-35) 🔄 EN PROGRESO
 
 #### Fase 7: Banco de Preguntas (Días 29-31) 🔄 54/90 completadas

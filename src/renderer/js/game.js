@@ -4,7 +4,8 @@ let gameState = {
   playerNames: ['Juan', 'Sofía'],
   playerColors: ['#F44336', '#2196F3'],
   totalCardsPlayed: 0,
-  gameStartTime: 0
+  gameStartTime: 0,
+  lastIsNewRecord: false
 };
 
 function showScreen(screenId) {
@@ -53,7 +54,7 @@ function addPlayer() {
 
   const colors = ['#F44336', '#2196F3', '#4CAF50', '#9C27B0'];
   const names = ['Juan', 'Sofía', 'Mateo', 'Valentina'];
-  
+
   const playerDiv = document.querySelector(`.player-input[data-player="${playerCount}"]`);
   if (playerDiv) {
     playerDiv.style.display = 'flex';
@@ -85,7 +86,7 @@ function collectPlayers() {
   return { names, colors };
 }
 
-function startGame() {
+async function startGame() {
   const { names, colors } = collectPlayers();
   if (names.length < 2) {
     alert('Se necesitan al menos 2 jugadores.');
@@ -95,15 +96,24 @@ function startGame() {
   gameState.playerNames = names;
   gameState.playerColors = colors;
   gameState.totalCardsPlayed = 0;
+  gameState.lastIsNewRecord = false;
   gameState.gameStartTime = Date.now();
 
   initPlayers(names, colors);
   usedQuestionIds.clear();
 
+  try {
+    await loadQuestionsForLevel(gameState.level);
+  } catch (err) {
+    console.error('No se pudieron cargar las preguntas:', err);
+    alert('Error cargando el banco de preguntas. Revisa la base de datos.');
+    return;
+  }
+
   updateGameUI();
   generateBoard(gameState.level);
   initPlayerPositions();
-  loadNextCard(gameState.level);
+  await loadNextCard(gameState.level);
   renderCard(currentCard, gameState.level);
   renderScoreboard();
   updateTurnDisplay();
@@ -174,13 +184,13 @@ function validateAnswer() {
   renderScoreboard();
   input.value = '';
 
-  setTimeout(() => {
+  setTimeout(async () => {
     const playerReachedFinish = hasPlayerReachedFinish(getCurrentPlayerIndex());
     if (gameState.totalCardsPlayed >= 30 || playerReachedFinish) {
-      endGame();
+      await endGame();
     } else {
       nextPlayer();
-      loadNextCard(gameState.level);
+      await loadNextCard(gameState.level);
       renderCard(currentCard, gameState.level);
       updateTurnDisplay();
       updateCardCounter();
@@ -195,16 +205,16 @@ function validateAnswer() {
   }, 2500);
 }
 
-function handleTimeUp() {
+async function handleTimeUp() {
   showFeedback(false, currentCard.answer);
   gameState.totalCardsPlayed++;
 
-  setTimeout(() => {
+  setTimeout(async () => {
     if (gameState.totalCardsPlayed >= 30) {
-      endGame();
+      await endGame();
     } else {
       nextPlayer();
-      loadNextCard(gameState.level);
+      await loadNextCard(gameState.level);
       renderCard(currentCard, gameState.level);
       updateTurnDisplay();
       updateCardCounter();
@@ -219,12 +229,56 @@ function handleTimeUp() {
   }, 2500);
 }
 
-function endGame() {
+function buildMatchPayload() {
+  const allPlayers = getAllPlayers();
+  const sorted = getSortedPlayers();
+  const positionById = {};
+  sorted.forEach((p, i) => { positionById[p.id] = i + 1; });
+
+  const totalTime = getTotalGameTime();
+
+  return {
+    level: gameState.level,
+    mode: gameState.mode,
+    played_at: new Date().toISOString(),
+    total_cards: gameState.totalCardsPlayed,
+    duration_seconds: totalTime,
+    winner_name: sorted.length > 0 ? sorted[0].name : null,
+    results: allPlayers.map(p => ({
+      player_name: p.name,
+      player_color: p.color,
+      score: p.score,
+      cards_resolved: p.cardsResolved,
+      cards_by_10: p.cardsByPoints[10] || 0,
+      cards_by_20: p.cardsByPoints[20] || 0,
+      cards_by_30: p.cardsByPoints[30] || 0,
+      total_time_seconds: p.totalTime,
+      fastest_card_seconds: p.fastestCard,
+      final_position: positionById[p.id] || null
+    }))
+  };
+}
+
+async function endGame() {
   stopCardTimer();
   stopGameTimer();
 
-  const totalTime = getTotalGameTime();
-  const avgTime = gameState.totalCardsPlayed > 0 ? Math.round(totalTime / gameState.totalCardsPlayed) : 0;
+  const payload = buildMatchPayload();
+
+  let savedOk = true;
+  let isNewRecord = false;
+  try {
+    const result = await window.mathingHead.saveMatch(payload);
+    isNewRecord = !!result?.isNewRecord;
+  } catch (err) {
+    console.error('No se pudo guardar la partida:', err);
+    savedOk = false;
+  }
+
+  gameState.lastIsNewRecord = isNewRecord;
+
+  const totalTime = payload.duration_seconds;
+  const avgTime = payload.total_cards > 0 ? Math.round(totalTime / payload.total_cards) : 0;
 
   document.getElementById('results-subtitle').textContent =
     `Resultados finales · ${LEVELS[gameState.level].fullName} · Modo ${gameState.mode === 'normal' ? 'Normal' : 'Concurso'}`;
@@ -242,6 +296,17 @@ function endGame() {
   const totalResolved = allPlayers.reduce((sum, p) => sum + p.cardsResolved, 0);
   document.getElementById('stat-cards').textContent = `${totalResolved} / 30`;
 
+  const newRecordEl = document.getElementById('results-new-record');
+  if (newRecordEl) {
+    newRecordEl.style.display = isNewRecord ? 'inline-flex' : 'none';
+  }
+
+  const saveStatus = document.getElementById('results-save-status');
+  if (saveStatus) {
+    saveStatus.textContent = savedOk ? 'Partida guardada' : '⚠ No se pudo guardar la partida';
+    saveStatus.className = savedOk ? 'save-status ok' : 'save-status err';
+  }
+
   renderPodium();
   showScreen('screen-results');
 }
@@ -251,6 +316,13 @@ function goHome() {
   stopGameTimer();
   playerCount = 2;
   showScreen('screen-home');
+}
+
+function goRecords() {
+  showScreen('screen-records');
+  if (typeof loadRecordsTab === 'function') {
+    loadRecordsTab('hof');
+  }
 }
 
 document.addEventListener('keydown', (e) => {
