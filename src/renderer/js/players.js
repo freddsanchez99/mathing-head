@@ -12,13 +12,22 @@ function initPlayers(names, colors) {
     cardsResolved: 0,
     cardsByPoints: { 10: 0, 20: 0, 30: 0 },
     totalTime: 0,
-    fastestCard: null
+    fastestCard: null,
+    boardPosition: 0
   }));
   currentPlayerIndex = 0;
 }
 
 function getCurrentPlayer() {
   return players[currentPlayerIndex];
+}
+
+function getCurrentPlayerIndex() {
+  return currentPlayerIndex;
+}
+
+function getAllPlayers() {
+  return players;
 }
 
 function nextPlayer() {
@@ -59,10 +68,10 @@ function renderScoreboard() {
   const sorted = getSortedPlayers();
   list.innerHTML = sorted.map((p, i) => `
     <div class="scoreboard-item ${i === 0 && p.id === getCurrentPlayer().id ? 'active' : ''}" data-player-id="${p.id}">
-      <div class="avatar avatar-sm" style="background:${p.color};">${p.name.charAt(0).toUpperCase()}</div>
-      <div>
+      <div class="avatar" style="width:28px; height:28px; font-size:0.8rem; background:${p.color};">${p.name.charAt(0).toUpperCase()}</div>
+      <div style="flex:1; min-width:0;">
         <div class="player-name">${p.name}</div>
-        <div class="player-cards">${p.cardsResolved} cartas resueltas</div>
+        <div class="player-cards">${p.cardsResolved} cartas</div>
       </div>
       <div class="player-score">${p.score}</div>
     </div>
@@ -82,8 +91,8 @@ function renderPodium() {
 
   podium.innerHTML = positions.map(pos => `
     <div class="podium-place ${pos.cls}">
-      ${pos.place === 1 ? '<svg class="podium-crown" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--color-amarillo)" stroke-width="2"><path d="M2 20h20M4 16l2-10 4 4 2-6 2 6 4-4 2 10"/></svg>' : ''}
-      <div class="avatar ${pos.place === 1 ? 'avatar-xl' : 'avatar-lg'}" style="background:${pos.player.color};">${pos.player.name.charAt(0).toUpperCase()}</div>
+      ${pos.place === 1 ? '<svg class="podium-crown" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--color-amarillo)" stroke-width="2"><path d="M2 20h20M4 16l2-10 4 4 2-6 2 6 4-4 2 10"/></svg>' : ''}
+      <div class="avatar" style="width:${pos.place === 1 ? '60px' : '50px'}; height:${pos.place === 1 ? '60px' : '50px'}; font-size:${pos.place === 1 ? '1.5rem' : '1.25rem'}; background:${pos.player.color};">${pos.player.name.charAt(0).toUpperCase()}</div>
       <div class="podium-player-name">${pos.player.name}</div>
       <div class="podium-score">
         <span class="score-num">${pos.player.score}</span>

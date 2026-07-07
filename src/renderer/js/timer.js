@@ -3,6 +3,7 @@ let gameTimerInterval = null;
 let cardTimeRemaining = CARD_TIME;
 let gameTimeRemaining = 0;
 let cardStartTime = 0;
+let gameStartTime = 0;
 
 function formatTime(seconds) {
   const m = Math.floor(seconds / 60);
@@ -40,18 +41,18 @@ function getCardTimeSpent() {
 }
 
 function updateCardTimerDisplay() {
-  const texts = document.querySelectorAll('#card-timer-text, #challenge-timer-text');
-  texts.forEach(el => { el.textContent = formatTime(cardTimeRemaining); });
+  const text = document.getElementById('card-timer-text');
+  if (text) text.textContent = formatTime(cardTimeRemaining);
 
-  const chips = document.querySelectorAll('#card-timer, #challenge-timer');
-  chips.forEach(chip => {
+  const chip = document.getElementById('card-timer');
+  if (chip) {
     chip.classList.remove('warning', 'danger');
     if (cardTimeRemaining <= 30) {
       chip.classList.add('danger');
     } else if (cardTimeRemaining <= 60) {
       chip.classList.add('warning');
     }
-  });
+  }
 }
 
 function startGameTimer(onTick, onTimeUp) {
@@ -69,6 +70,10 @@ function startGameTimer(onTick, onTimeUp) {
       if (onTimeUp) onTimeUp();
     }
   }, 1000);
+}
+
+function startNormalGameTimer() {
+  gameStartTime = Date.now();
 }
 
 function stopGameTimer() {
@@ -96,6 +101,9 @@ function updateGameTimerDisplay() {
 function getTotalGameTime() {
   if (gameTimerInterval) {
     return GAME_TIME_CONCURSO - gameTimeRemaining;
+  }
+  if (gameStartTime > 0) {
+    return Math.floor((Date.now() - gameStartTime) / 1000);
   }
   return 0;
 }

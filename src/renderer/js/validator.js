@@ -6,21 +6,34 @@ function validateNumericAnswer(userAnswer, correctAnswer, tolerance = 0.01) {
   return Math.abs(user - correct) <= tolerance;
 }
 
-function showFeedback(isCorrect, correctAnswer) {
+function showFeedback(isCorrect, correctAnswer, cellEffect = null) {
   const overlay = document.getElementById('feedback-overlay');
   const emoji = document.getElementById('feedback-emoji');
   const message = document.getElementById('feedback-message');
+  const effectEl = document.getElementById('feedback-effect');
 
   overlay.classList.remove('correct', 'incorrect');
 
   if (isCorrect) {
     overlay.classList.add('correct');
     emoji.textContent = '🎉';
-    message.textContent = '¡Correcto!';
+    let msg = `¡Correcto! +${currentCard.points} pts`;
+    if (cellEffect && cellEffect.points > 0) {
+      msg += ` · ${cellEffect.label}`;
+    }
+    message.textContent = msg;
+    effectEl.textContent = '';
+    effectEl.style.display = 'none';
   } else {
     overlay.classList.add('incorrect');
     emoji.textContent = '';
-    message.textContent = `Incorrecto · Respuesta: ${correctAnswer}`;
+    let msg = `Incorrecto · Respuesta: ${correctAnswer}`;
+    if (cellEffect && cellEffect.points < 0) {
+      msg += ` · ${cellEffect.label}`;
+    }
+    message.textContent = msg;
+    effectEl.textContent = '';
+    effectEl.style.display = 'none';
   }
 
   overlay.classList.add('active');

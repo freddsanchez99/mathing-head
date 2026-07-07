@@ -7,8 +7,6 @@ let gameState = {
   gameStartTime: 0
 };
 
-let challengeAnswer = '';
-
 function showScreen(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(screenId).classList.add('active');
@@ -55,18 +53,16 @@ function addPlayer() {
 
   const colors = ['#F44336', '#2196F3', '#4CAF50', '#9C27B0'];
   const names = ['Juan', 'Sofía', 'Mateo', 'Valentina'];
-  const row = document.getElementById('extra-players-row');
-  row.style.display = 'flex';
-
+  
   const playerDiv = document.querySelector(`.player-input[data-player="${playerCount}"]`);
   if (playerDiv) {
     playerDiv.style.display = 'flex';
     playerDiv.querySelector('input').value = names[playerCount - 1];
   }
 
-  if (playerCount >= 4) {
-    const addBtn = document.querySelector('.player-input[data-player="4"]');
-    if (addBtn) addBtn.style.display = 'none';
+  const addBtn = document.querySelector('.player-input[data-player="add"]');
+  if (playerCount >= 4 && addBtn) {
+    addBtn.style.display = 'none';
   }
 }
 
@@ -77,6 +73,7 @@ function collectPlayers() {
 
   inputs.forEach(input => {
     if (input.style.display === 'none') return;
+    if (input.dataset.player === 'add') return;
     const nameInput = input.querySelector('input');
     const avatar = input.querySelector('.avatar');
     if (nameInput && nameInput.value.trim()) {
@@ -105,6 +102,7 @@ function startGame() {
 
   updateGameUI();
   generateBoard(gameState.level);
+  initPlayerPositions();
   loadNextCard(gameState.level);
   renderCard(currentCard, gameState.level);
   renderScoreboard();
@@ -118,6 +116,8 @@ function startGame() {
       () => {},
       () => endGame()
     );
+  } else {
+    startNormalGameTimer();
   }
 
   startCardTimer(
@@ -149,48 +149,34 @@ function updateTurnDisplay() {
   avatar.style.background = player.color;
 }
 
-function showChallengeScreen() {
-  showScreen('screen-challenge');
-  challengeAnswer = '';
-  document.getElementById('challenge-answer-value').textContent = '';
-
-  startCardTimer(
-    () => {},
-    () => handleTimeUp()
-  );
-}
-
-function numpadPress(key) {
-  if (challengeAnswer.length >= 8) return;
-  if (key === '.' && challengeAnswer.includes('.')) return;
-
-  challengeAnswer += key;
-  document.getElementById('challenge-answer-value').textContent = challengeAnswer;
-}
-
-function numpadDelete() {
-  challengeAnswer = challengeAnswer.slice(0, -1);
-  document.getElementById('challenge-answer-value').textContent = challengeAnswer;
-}
-
 function validateAnswer() {
-  if (!challengeAnswer || challengeAnswer === '') return;
+  const input = document.getElementById('card-answer-input');
+  const userAnswer = input.value.trim();
+  if (!userAnswer) return;
 
   stopCardTimer();
   const timeSpent = getCardTimeSpent();
-  const isCorrect = validateNumericAnswer(challengeAnswer, currentCard.answer);
+  const isCorrect = validateNumericAnswer(userAnswer, currentCard.answer);
 
-  showFeedback(isCorrect, currentCard.answer);
+  const playerIdx = getCurrentPlayerIndex();
 
   if (isCorrect) {
     addScore(currentCard.points, timeSpent);
+    movePlayerToken(playerIdx, 1);
+    const effect = applyCellEffect(playerIdx);
+    animateCellLanding(playerIdx);
+    showFeedback(isCorrect, currentCard.answer, effect);
+  } else {
+    showFeedback(isCorrect, currentCard.answer);
   }
 
   gameState.totalCardsPlayed++;
   renderScoreboard();
+  input.value = '';
 
   setTimeout(() => {
-    if (gameState.totalCardsPlayed >= 30) {
+    const playerReachedFinish = hasPlayerReachedFinish(getCurrentPlayerIndex());
+    if (gameState.totalCardsPlayed >= 30 || playerReachedFinish) {
       endGame();
     } else {
       nextPlayer();
@@ -198,6 +184,7 @@ function validateAnswer() {
       renderCard(currentCard, gameState.level);
       updateTurnDisplay();
       updateCardCounter();
+      updateTokenPositions();
       showScreen('screen-game');
 
       startCardTimer(
@@ -221,6 +208,7 @@ function handleTimeUp() {
       renderCard(currentCard, gameState.level);
       updateTurnDisplay();
       updateCardCounter();
+      updateTokenPositions();
       showScreen('screen-game');
 
       startCardTimer(
@@ -266,16 +254,10 @@ function goHome() {
 }
 
 document.addEventListener('keydown', (e) => {
-  const challengeScreen = document.getElementById('screen-challenge');
-  if (!challengeScreen.classList.contains('active')) return;
+  const gameScreen = document.getElementById('screen-game');
+  if (!gameScreen.classList.contains('active')) return;
 
-  if (e.key >= '0' && e.key <= '9') {
-    numpadPress(e.key);
-  } else if (e.key === '.') {
-    numpadPress('.');
-  } else if (e.key === 'Backspace') {
-    numpadDelete();
-  } else if (e.key === 'Enter') {
+  if (e.key === 'Enter') {
     validateAnswer();
   }
 });
