@@ -374,12 +374,13 @@ body {
 
 .player-colors {
   display: flex;
-  gap: 6px;
+  flex-direction: row;
+  gap: 4px;
 }
 
 .player-color-dot {
-  width: 20px;
-  height: 20px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   border: 2px solid #fff;
   cursor: pointer;
@@ -394,4 +395,18 @@ body {
 .player-color-dot.active {
   border: 2px solid var(--text-principal);
   transform: scale(1.15);
+}
+
+#players-container {
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+#players-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+#players-container::-webkit-scrollbar-thumb {
+  background: var(--color-naranja);
+  border-radius: 3px;
 }
